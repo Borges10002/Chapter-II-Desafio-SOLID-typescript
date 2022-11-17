@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Atlas",
+    "description": "Essa é uma documentação sobre a atals API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "borgesdevelop@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "description": "Gerenciamento de usuários",
+        "summary": "Criar um novo usuário.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "exemple": {
+                  "name": "User nane sample",
+                  "description": "User email sample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "create new users"
+          },
+          "400": {
+            "description": "Should not be able to create new users when email is already taken"
+          }
+        }
+      },
+
+      "get": {
+        "tags": ["users"],
+        "summary": "Retorno todos os usuários",
+        "description": "Somente usuário admin pode acessar.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "description": "Codigo unico do id criado",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "last_name": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "avatar_url": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
