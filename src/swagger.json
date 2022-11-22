@@ -71,20 +71,20 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "email": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "last_name": {
+                      "admin": {
                         "type": "string"
                       },
                       "id": {
                         "type": "string"
                       },
-                      "avatar_url": {
+                      "name": {
                         "type": "string"
+                      },
+                      "created_at": {
+                        "type": "date"
+                      },
+                      "update_at": {
+                        "type": "date"
                       },
                       "role": {
                         "type": "string"
@@ -94,6 +94,121 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Usuário se permissão ou Usuário não encontrado"
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Retorno um usuário especifico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "user_id ID do usuario",
+            "required": true,
+            "Schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      },
+                      "update_at": {
+                        "type": "Date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Torna admin um usuário",
+
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "patch",
+            "description": "Codigo unico do id criado",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "date"
+                      },
+                      "update_at": {
+                        "type": "date"
+                      },
+                      "role": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
           }
         }
       }
