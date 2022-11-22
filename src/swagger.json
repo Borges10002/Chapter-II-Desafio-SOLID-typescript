@@ -2,18 +2,20 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Atlas",
-    "description": "Essa é uma documentação sobre a atals API",
-    "version": "1.0.0",
-    "contact": {
-      "email": "borgesdevelop@gmail.com"
-    }
+    "description": "Essa é uma documentação para o Atlas API",
+    "version": "1.0.0"
   },
+  "tags": [
+    {
+      "name": "users",
+      "description": "Gerenciamento de usuários"
+    }
+  ],
   "paths": {
     "/users": {
       "post": {
         "tags": ["users"],
-        "description": "Gerenciamento de usuários",
-        "summary": "Criar um novo usuário.",
+        "summary": "Cria um novo usuário.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27,9 +29,9 @@
                     "type": "string"
                   }
                 },
-                "exemple": {
-                  "name": "User nane sample",
-                  "description": "User email sample"
+                "example": {
+                  "name": "borges",
+                  "email": "borgesdevelop@gmail.com"
                 }
               }
             }
@@ -37,87 +39,79 @@
         },
         "responses": {
           "201": {
-            "description": "create new users"
-          },
-          "400": {
-            "description": "Should not be able to create new users when email is already taken"
-          }
-        }
-      },
-
-      "get": {
-        "tags": ["users"],
-        "summary": "Retorno todos os usuários",
-        "description": "Somente usuário admin pode acessar.",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "header",
-            "description": "Codigo unico do id criado",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
+            "description": "Operação realizada com sucesso.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "admin": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "created_at": {
-                        "type": "date"
-                      },
-                      "update_at": {
-                        "type": "date"
-                      },
-                      "role": {
-                        "type": "string"
-                      }
+                  "type": "object",
+                  "properties": {
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
                     }
+                  },
+                  "example": {
+                    "admin": false,
+                    "id": "5ca0198e-ec03-48a7-bb96-954918646600",
+                    "name": "borges",
+                    "email": "borgesdevelop@gmail.com",
+                    "created_at": "2022-11-22T01:26:23.570Z",
+                    "updated_at": "2022-11-22T01:26:23.570Z"
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Usuário se permissão ou Usuário não encontrado"
+            "description": "Email já está sendo utilizado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "string"
+                  },
+                  "example": {
+                    "error": "User already exists."
+                  }
+                }
+              }
+            }
           }
         }
-      }
-    },
-
-    "/users/{user_id}": {
+      },
       "get": {
         "tags": ["users"],
-        "summary": "Retorno um usuário especifico",
+        "summary": "Retorna todos os usuários.",
+        "description": "Somente usuário `admin` pode acessar.",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "user_id ID do usuario",
+            "in": "header",
+            "name": "user_id",
             "required": true,
-            "Schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Operação realizado com sucesso",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
@@ -138,77 +132,196 @@
                         "type": "string"
                       },
                       "created_at": {
-                        "type": "Date"
+                        "type": "string"
                       },
-                      "update_at": {
-                        "type": "Date"
+                      "updated_at": {
+                        "type": "string"
                       }
-                    }
+                    },
+                    "example": [
+                      {
+                        "admin": true,
+                        "id": "c7fc2e45-7a9e-4ca6-9023-06a554567155",
+                        "name": "borges",
+                        "email": "borgesdevelop@gmail.com",
+                        "created_at": "2022-11-22T02:15:02.295Z",
+                        "updated_at": "2022-11-22T02:15:02.295Z"
+                      },
+                      {
+                        "admin": false,
+                        "id": "745c9773-119d-40be-aa66-4af7aae4b045",
+                        "name": "borges3",
+                        "email": "borgesdevelop3@gmail.com",
+                        "created_at": "2022-11-22T02:15:56.720Z",
+                        "updated_at": "2022-11-22T02:15:56.720Z"
+                      }
+                    ]
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Usuário não encontrado"
+          "400": {
+            "description": "Usuário sem permissão ou Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "string"
+                  },
+                  "example": {
+                    "error": "Only admins can access the list."
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-
-    "/users/{user_id}/admin": {
-      "patch": {
+    "/users/{user_id}": {
+      "get": {
         "tags": ["users"],
-        "summary": "Torna admin um usuário",
-
+        "summary": "Retorna um usuário específico.",
         "parameters": [
           {
+            "in": "path",
             "name": "user_id",
-            "in": "patch",
-            "description": "Codigo unico do id criado",
+            "required": true,
+            "description": "ID do usuário",
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Operação realizado com sucesso",
+            "description": "Operação realizada com sucesso.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "admin": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "created_at": {
-                        "type": "date"
-                      },
-                      "update_at": {
-                        "type": "date"
-                      },
-                      "role": {
-                        "type": "string"
-                      }
+                  "type": "object",
+                  "properties": {
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
                     }
+                  },
+                  "example": {
+                    "admin": false,
+                    "id": "745c9773-119d-40be-aa66-4af7aae4b045",
+                    "name": "borges3",
+                    "email": "borgesdevelop3@gmail.com",
+                    "created_at": "2022-11-22T02:15:56.720Z",
+                    "updated_at": "2022-11-22T02:15:56.720Z"
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "Usuário não encontrado"
+            "description": "Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "string"
+                  },
+                  "example": {
+                    "error": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Torna admin um usuário.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "admin": true,
+                    "id": "745c9773-119d-40be-aa66-4af7aae4b045",
+                    "name": "borges3",
+                    "email": "borgesdevelop3@gmail.com",
+                    "created_at": "2022-11-22T02:15:56.720Z",
+                    "updated_at": "2022-11-22T02:15:56.720Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "string"
+                  },
+                  "example": {
+                    "error": "User not found"
+                  }
+                }
+              }
+            }
           }
         }
       }
